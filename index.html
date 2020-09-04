@@ -15,7 +15,10 @@
     <p style="color:white;" id="temp"></p>
 
     <script>
-        let i = 0
+        const WIDTH = 10
+        const HEIGHT = 5
+        let universe = new Array(HEIGHT).fill(new Array(WIDTH).fill(false))
+
         let loopID = -1
 
         function run() {
@@ -32,18 +35,17 @@
         }
 
         function step() {
-            i += 1
-            update()
+            display()
         }
 
         function reset() {
             pause()
-            i = 0
-            update()
+            universe = new Array(HEIGHT).fill(new Array(WIDTH).fill(false))
+            display()
         }
 
-        function update() {
-            document.getElementById("temp").innerHTML = i
+        function display() {
+            document.getElementById("temp").innerHTML = universe
         }
     </script>
 </body>

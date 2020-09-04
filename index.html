@@ -1,8 +1,51 @@
 <!DOCTYPE html>
+
 <html>
 
-<body style="background-color:black;">
+<head>
+    <title>Conway's Game of Life</title>
+</head>
 
+<body style="background-color:black;">
+    <button onclick="run()">Run</button>
+    <button onclick="pause()">Pause</button>
+    <button onclick="step()">Step</button>
+    <button onclick="reset()">Reset</button>
+
+    <p style="color:white;" id="temp"></p>
+
+    <script>
+        let i = 0
+        let loopID = -1
+
+        function run() {
+            if (loopID == -1) {
+                loopID = setInterval(step, 500)
+            }
+        }
+
+        function pause() {
+            if (loopID != -1) {
+                clearInterval(loopID)
+                loopID = -1
+            }
+        }
+
+        function step() {
+            i += 1
+            update()
+        }
+
+        function reset() {
+            pause()
+            i = 0
+            update()
+        }
+
+        function update() {
+            document.getElementById("temp").innerHTML = i
+        }
+    </script>
 </body>
 
 </html>

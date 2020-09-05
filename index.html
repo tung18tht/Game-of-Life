@@ -14,8 +14,12 @@
             display: grid;
         }
 
-        .cell {
+        .live {
             background-color: white;
+        }
+
+        .dead {
+            background-color: black;
         }
     </style>
 </head>
@@ -32,23 +36,26 @@
 
 
     <script>
-        const WIDTH = 10
-        const HEIGHT = 5
+        const WIDTH = 3
+        const HEIGHT = 2
         const CELL_SIZE = 50
 
         let loopID = -1
+        let universe = createEmptyUniverse()
 
-        let universe = new Array(HEIGHT).fill(new Array(WIDTH).fill(false))
-
-        universeDiv = document.getElementById("universe")
+        const universeDiv = document.getElementById("universe")
         universeDiv.style.gridTemplateColumns = "repeat(" + WIDTH + ", " + CELL_SIZE + "px)"
 
-        for (let i = 0; i < WIDTH * HEIGHT; i++) {
-            const cellDiv = document.createElement("div")
-            cellDiv.className = "cell"
-            cellDiv.style.width = CELL_SIZE + "px"
-            cellDiv.style.height = CELL_SIZE + "px"
-            universeDiv.appendChild(cellDiv)
+        const cellDivs = createEmpty2DArray(WIDTH, HEIGHT)
+        for (let i = 0; i < HEIGHT; i++) {
+            for (let j = 0; j < WIDTH; j++) {
+                const cellDiv = document.createElement("div")
+                cellDiv.style.width = CELL_SIZE + "px"
+                cellDiv.style.height = CELL_SIZE + "px"
+
+                universeDiv.appendChild(cellDiv)
+                cellDivs[i][j] = cellDiv
+            }
         }
 
 
@@ -66,16 +73,42 @@
         }
 
         function step() {
+            for (let i = 0; i < HEIGHT; i++) {
+                for (let j = 0; j < WIDTH; j++) {
+                    universe[i][j] = !universe[i][j]
+                }
+            }
             display()
         }
 
         function reset() {
             pause()
-            universe = new Array(HEIGHT).fill(new Array(WIDTH).fill(false))
+            universe = createEmptyUniverse()
             display()
         }
 
         function display() {
+            for (let i = 0; i < HEIGHT; i++) {
+                for (let j = 0; j < WIDTH; j++) {
+                    cellDivs[i][j].className = universe[i][j] ? "live" : "dead"
+                }
+            }
+        }
+
+        function createEmptyUniverse() {
+            const emptyUniverse = createEmpty2DArray(WIDTH, HEIGHT)
+            emptyUniverse.forEach(row => row.fill(false))
+
+            return emptyUniverse
+        }
+
+        function createEmpty2DArray(width, height) {
+            const emptyArray = new Array(height)
+            for (let i = 0; i < height; i++) {
+                emptyArray[i] = new Array(width)
+            }
+
+            return emptyArray
         }
     </script>
 </body>

@@ -38,7 +38,6 @@
 
     <div id="universe"></div>
 
-
     <script>
         let width = 70
         let height = 30
@@ -52,18 +51,18 @@
 
         const CELL_DIVS = createEmpty2DArray(width, height)
 
-        for (let i = 0; i < height; i++) {
-            for (let j = 0; j < width; j++) {
+        for (let row= 0; row < height; row++) {
+            for (let col = 0; col < width; col++) {
                 const cellDiv = document.createElement("div")
                 cellDiv.style.width = cellSize + "px"
                 cellDiv.style.height = cellSize + "px"
 
                 cellDiv.className = "dead"
 
-                cellDiv.addEventListener("click", () => flip(i, j))
+                cellDiv.addEventListener("click", () => flip(row, col))
 
                 UNIVERSE_DIV.appendChild(cellDiv)
-                CELL_DIVS[i][j] = cellDiv
+                CELL_DIVS[row][col] = cellDiv
             }
         }
 
@@ -82,30 +81,56 @@
         }
 
         function step() {
-            for (let i = 0; i < height; i++) {
-                for (let j = 0; j < width; j++) {
-                    flip(i, j)
+            const newUniverse = createEmptyUniverse()
+
+            for (let row = 0; row < height; row++) {
+                for (let col = 0; col < width; col++) {
+                    const minRow = row > 1 ? row - 1 : 0
+                    const minCol = col > 1 ? col - 1 : 0
+                    const capRow = row < height - 2 ? row + 2 : height
+                    const capCol = col < width - 2 ? col + 2 : width
+
+                    let livingNeighbors = 0
+
+                    for (let neighborRow = minRow; neighborRow < capRow; neighborRow++) {
+                        for (let neighborCol = minCol; neighborCol < capCol; neighborCol++) {
+                            if (neighborRow != row || neighborCol != col) {
+                                livingNeighbors += universe[neighborRow][neighborCol] ? 1 : 0
+                            }
+                        }
+                    }
+
+                    if (livingNeighbors == 3 || (universe[row][col] && livingNeighbors == 2)) {
+                        newUniverse[row][col] = true
+                    }
                 }
             }
+
+            universe = newUniverse
+            updateAllCellDivs()
         }
 
         function reset() {
             pause()
             universe = createEmptyUniverse()
-            for (let i = 0; i < height; i++) {
-                for (let j = 0; j < width; j++) {
-                    updateCellDiv(i, j)
+            updateAllCellDivs()
+        }
+
+        function updateAllCellDivs() {
+            for (let row= 0; row < height; row++) {
+                for (let col = 0; col < width; col++) {
+                    updateCellDiv(row, col)
                 }
             }
         }
 
-        function flip(i, j) {
-            universe[i][j] = !universe[i][j]
-            updateCellDiv(i, j)
+        function flip(row, col) {
+            universe[row][col] = !universe[row][col]
+            updateCellDiv(row, col)
         }
 
-        function updateCellDiv(i, j) {
-            CELL_DIVS[i][j].className = universe[i][j] ? "live" : "dead"
+        function updateCellDiv(row, col) {
+            CELL_DIVS[row][col].className = universe[row][col] ? "live" : "dead"
         }
 
         function createEmptyUniverse() {
@@ -117,8 +142,8 @@
 
         function createEmpty2DArray(width, height) {
             const emptyArray = new Array(height)
-            for (let i = 0; i < height; i++) {
-                emptyArray[i] = new Array(width)
+            for (let row = 0; row < height; row++) {
+                emptyArray[row] = new Array(width)
             }
 
             return emptyArray

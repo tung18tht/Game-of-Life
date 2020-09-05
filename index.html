@@ -4,22 +4,80 @@
 
 <head>
     <title>Conway's Game of Life</title>
+
+    <style>
+        body {
+            background-color: black;
+        }
+
+        #universe {
+            display: grid;
+        }
+
+        .cell {
+            background-color: white;
+        }
+    </style>
 </head>
 
-<body style="background-color:black;">
-    <button onclick="run()">Run</button>
-    <button onclick="pause()">Pause</button>
-    <button onclick="step()">Step</button>
-    <button onclick="reset()">Reset</button>
+<body>
+    <div>
+        <button onclick="run()">Run</button>
+        <button onclick="pause()">Pause</button>
+        <button onclick="step()">Step</button>
+        <button onclick="reset()">Reset</button>
+    </div>
 
-    <p style="color:white;" id="temp"></p>
+    <div id="universe">
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+    </div>
+
 
     <script>
         const WIDTH = 10
         const HEIGHT = 5
         let universe = new Array(HEIGHT).fill(new Array(WIDTH).fill(false))
 
+        const CELL_SIZE = 50
+
         let loopID = -1
+
+        document.getElementById("universe").style.gridTemplateColumns
+            = "repeat(" + WIDTH + ", " + CELL_SIZE + "px)"
+
+        for (const cell of document.getElementsByClassName("cell")) {
+            cell.style.width = CELL_SIZE + "px"
+            cell.style.height = CELL_SIZE + "px"
+        }
 
         function run() {
             if (loopID == -1) {
@@ -45,7 +103,6 @@
         }
 
         function display() {
-            document.getElementById("temp").innerHTML = universe
         }
     </script>
 </body>

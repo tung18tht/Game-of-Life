@@ -28,56 +28,29 @@
         <button onclick="reset()">Reset</button>
     </div>
 
-    <div id="universe">
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-    </div>
+    <div id="universe"></div>
 
 
     <script>
         const WIDTH = 10
         const HEIGHT = 5
-        let universe = new Array(HEIGHT).fill(new Array(WIDTH).fill(false))
-
         const CELL_SIZE = 50
 
         let loopID = -1
 
-        document.getElementById("universe").style.gridTemplateColumns
-            = "repeat(" + WIDTH + ", " + CELL_SIZE + "px)"
+        let universe = new Array(HEIGHT).fill(new Array(WIDTH).fill(false))
 
-        for (const cell of document.getElementsByClassName("cell")) {
-            cell.style.width = CELL_SIZE + "px"
-            cell.style.height = CELL_SIZE + "px"
+        universeDiv = document.getElementById("universe")
+        universeDiv.style.gridTemplateColumns = "repeat(" + WIDTH + ", " + CELL_SIZE + "px)"
+
+        for (let i = 0; i < WIDTH * HEIGHT; i++) {
+            const cellDiv = document.createElement("div")
+            cellDiv.className = "cell"
+            cellDiv.style.width = CELL_SIZE + "px"
+            cellDiv.style.height = CELL_SIZE + "px"
+            universeDiv.appendChild(cellDiv)
         }
+
 
         function run() {
             if (loopID == -1) {

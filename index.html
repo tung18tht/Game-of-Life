@@ -54,6 +54,10 @@
                 cellDiv.style.width = cellSize + "px"
                 cellDiv.style.height = cellSize + "px"
 
+                cellDiv.className = "dead"
+
+                cellDiv.addEventListener("click", () => flip(i, j))
+
                 UNIVERSE_DIV.appendChild(cellDiv)
                 CELL_DIVS[i][j] = cellDiv
             }
@@ -76,24 +80,28 @@
         function step() {
             for (let i = 0; i < height; i++) {
                 for (let j = 0; j < width; j++) {
-                    universe[i][j] = !universe[i][j]
+                    flip(i, j)
                 }
             }
-            display()
         }
 
         function reset() {
             pause()
             universe = createEmptyUniverse()
-            display()
-        }
-
-        function display() {
             for (let i = 0; i < height; i++) {
                 for (let j = 0; j < width; j++) {
-                    CELL_DIVS[i][j].className = universe[i][j] ? "live" : "dead"
+                    updateCellDiv(i, j)
                 }
             }
+        }
+
+        function flip(i, j) {
+            universe[i][j] = !universe[i][j]
+            updateCellDiv(i, j)
+        }
+
+        function updateCellDiv(i, j) {
+            CELL_DIVS[i][j].className = universe[i][j] ? "live" : "dead"
         }
 
         function createEmptyUniverse() {

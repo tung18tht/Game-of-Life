@@ -42,6 +42,7 @@
         let width = 70
         let height = 30
         let cellSize = 20
+        let fps = 3
 
         let loopID = -1
         let universe = createEmptyUniverse()
@@ -69,7 +70,7 @@
 
         function run() {
             if (loopID == -1) {
-                loopID = setInterval(step, 500)
+                loopID = setInterval(step, 1000 / fps)
             }
         }
 

@@ -33,6 +33,7 @@
         <button onclick="run()">Run</button>
         <button onclick="pause()">Pause</button>
         <button onclick="step()">Step</button>
+        <button onclick="random()">Random</button>
         <button onclick="reset()">Reset</button>
     </div>
 
@@ -108,6 +109,19 @@
             }
 
             universe = newUniverse
+            updateAllCellDivs()
+        }
+
+        function random() {
+            pause()
+            universe = createEmptyUniverse()
+
+            for (let row = 0; row < height; row++) {
+                for (let col = 0; col < width; col++) {
+                    universe[row][col] = Math.random() < 0.5
+                }
+            }
+
             updateAllCellDivs()
         }
 

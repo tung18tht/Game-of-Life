@@ -11,11 +11,13 @@
         }
 
         #topbar {
+            margin: 5px;
             display: grid;
             grid-template-columns: 30% 40% 30%;
         }
 
         #title {
+            margin: auto;
             color: white;
             text-align: center;
             font-family: monospace;
@@ -23,6 +25,8 @@
         }
 
         #steps {
+            margin-top: auto;
+            margin-bottom: auto;
             color: white;
             text-align: right;
             font-family: monospace;
@@ -30,6 +34,7 @@
         }
 
         #footer {
+            margin: 5px;
             color: white;
             font-family: monospace;
             font-size: 15px;
@@ -48,6 +53,7 @@
         }
 
         #universe {
+            margin: 5px;
             display: grid;
         }
 
@@ -86,7 +92,9 @@
 
     <div id="universe" title="You can judge the cells destiny ... by clicking"></div>
 
-    <div id="footer">Made by Tung Nguyen - <a href="" target="_blank">Source code</a></div>
+    <div id="footer">Made by Tung Nguyen -
+        <a href="https://github.com/tung18tht/Game-of-Life" target="_blank">Source code</a>
+    </div>
 
     <script>
         let width = 70
@@ -166,26 +174,24 @@
         }
 
         function random() {
-            if (loopID == -1) {
-                universe = createEmptyUniverse()
+            pause()
+            universe = createEmptyUniverse()
 
-                for (let row = 0; row < height; row++) {
-                    for (let col = 0; col < width; col++) {
-                        universe[row][col] = Math.random() < 0.5
-                    }
+            for (let row = 0; row < height; row++) {
+                for (let col = 0; col < width; col++) {
+                    universe[row][col] = Math.random() < 0.5
                 }
-
-                updateAllCellDivs()
-                updateStepsNumber(0)
             }
+
+            updateAllCellDivs()
+            updateStepsNumber(0)
         }
 
         function reset() {
-            if (loopID == -1) {
-                universe = createEmptyUniverse()
-                updateAllCellDivs()
-                updateStepsNumber(0)
-            }
+            pause()
+            universe = createEmptyUniverse()
+            updateAllCellDivs()
+            updateStepsNumber(0)
         }
 
         function flip(row, col) {

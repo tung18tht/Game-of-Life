@@ -25,13 +25,13 @@
             font-size: 30px;
         }
 
-        #steps {
+        #stats {
             margin-top: auto;
             margin-bottom: auto;
             color: white;
             text-align: right;
             font-family: monospace;
-            font-size: 20px;
+            font-size: 15px;
         }
 
         #footer {
@@ -86,8 +86,11 @@
             Conway's Game of Life
         </div>
 
-        <div id="steps">
-            Steps: <span id="stepsNumber">0</span>
+        <div id="stats">
+            <span id="liveCells">0</span>/<span id="totalCells">0</span>
+                (<span id="alivePercentage">00.00</span>%) cells alive
+            <br>
+            Steps: <span id="steps">0</span>
         </div>
     </div>
 
@@ -98,12 +101,15 @@
     </div>
 
     <script>
-        let width = 70
-        let height = 30
-        let cellSize = 20
-        let fps = 10
+        let width = 140
+        let height = 55
+        let cellSize = 10
+        let fps = 5
 
         let steps = 0
+        let liveCells = 0
+        let totalCells = width * height
+
         let loopID = -1
         let universe = createEmptyUniverse()
 
@@ -127,7 +133,12 @@
             }
         }
 
-        const STEPS_NUMBER_SPAN = document.getElementById("stepsNumber")
+        const LIVE_CELLS_SPAN = document.getElementById("liveCells")
+        const TOTAL_CELLS_SPAN = document.getElementById("totalCells")
+        const ALIVE_PERCENTAGE_SPAN = document.getElementById("alivePercentage")
+        const STEPS_SPAN = document.getElementById("steps")
+
+        TOTAL_CELLS_SPAN.innerHTML = totalCells
 
 
         function play() {
@@ -145,6 +156,7 @@
 
         function step() {
             const newUniverse = createEmptyUniverse()
+            let newLiveCells = 0
 
             for (let row = 0; row < height; row++) {
                 for (let col = 0; col < width; col++) {
@@ -165,41 +177,50 @@
 
                     if (livingNeighbors == 3 || (universe[row][col] && livingNeighbors == 2)) {
                         newUniverse[row][col] = true
+                        newLiveCells += 1
                     }
                 }
             }
 
             universe = newUniverse
             updateAllCellDivs()
-            updateStepsNumber(steps + 1)
+            updateAliveStats(newLiveCells)
+            updateSteps(steps + 1)
         }
 
         function random() {
             pause()
             universe = createEmptyUniverse()
+            let newLiveCells = 0
 
             for (let row = 0; row < height; row++) {
                 for (let col = 0; col < width; col++) {
-                    universe[row][col] = Math.random() < 0.5
+                    if (Math.random() < 0.5) {
+                        universe[row][col] = true
+                        newLiveCells += 1
+                    }
                 }
             }
 
             updateAllCellDivs()
-            updateStepsNumber(0)
+            updateAliveStats(newLiveCells)
+            updateSteps(0)
         }
 
         function reset() {
             pause()
             universe = createEmptyUniverse()
             updateAllCellDivs()
-            updateStepsNumber(0)
+            updateAliveStats(0)
+            updateSteps(0)
         }
 
         function flip(row, col) {
             if (loopID == -1) {
                 universe[row][col] = !universe[row][col]
                 updateCellDiv(row, col)
-                updateStepsNumber(0)
+                updateAliveStats(liveCells + (universe[row][col] ? 1 : -1))
+                updateSteps(0)
             }
         }
 
@@ -215,9 +236,15 @@
             CELL_DIVS[row][col].className = universe[row][col] ? "live" : "dead"
         }
 
-        function updateStepsNumber(newSteps) {
+        function updateAliveStats(newLiveCells) {
+            liveCells = newLiveCells
+            LIVE_CELLS_SPAN.innerHTML = liveCells
+            ALIVE_PERCENTAGE_SPAN.innerHTML = ((liveCells / totalCells) * 100).toFixed(2)
+        }
+
+        function updateSteps(newSteps) {
             steps = newSteps
-            STEPS_NUMBER_SPAN.innerHTML = steps
+            STEPS_SPAN.innerHTML = steps
         }
 
         function createEmptyUniverse() {

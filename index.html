@@ -50,7 +50,7 @@
 <body>
     <div id="topbar">
         <div>
-            <button onclick="run()">Run</button>
+            <button onclick="play()">Play</button>
             <button onclick="pause()">Pause</button>
             <button onclick="step()">Step</button>
             <button onclick="random()">Random</button>
@@ -62,7 +62,7 @@
         </div>
 
         <div id="steps">
-            Steps: 0
+            Steps: <span id="stepsNumber">0</span>
         </div>
     </div>
 
@@ -74,6 +74,7 @@
         let cellSize = 20
         let fps = 10
 
+        let steps = 0
         let loopID = -1
         let universe = createEmptyUniverse()
 
@@ -97,8 +98,10 @@
             }
         }
 
+        const STEPS_NUMBER_SPAN = document.getElementById("stepsNumber")
 
-        function run() {
+
+        function play() {
             if (loopID == -1) {
                 loopID = setInterval(step, 1000 / fps)
             }
@@ -139,6 +142,7 @@
 
             universe = newUniverse
             updateAllCellDivs()
+            updateStepsNumber(steps + 1)
         }
 
         function random() {
@@ -152,6 +156,7 @@
                 }
 
                 updateAllCellDivs()
+                updateStepsNumber(0)
             }
         }
 
@@ -159,6 +164,15 @@
             if (loopID == -1) {
                 universe = createEmptyUniverse()
                 updateAllCellDivs()
+                updateStepsNumber(0)
+            }
+        }
+
+        function flip(row, col) {
+            if (loopID == -1) {
+                universe[row][col] = !universe[row][col]
+                updateCellDiv(row, col)
+                updateStepsNumber(0)
             }
         }
 
@@ -170,15 +184,13 @@
             }
         }
 
-        function flip(row, col) {
-            if (loopID == -1) {
-                universe[row][col] = !universe[row][col]
-                updateCellDiv(row, col)
-            }
-        }
-
         function updateCellDiv(row, col) {
             CELL_DIVS[row][col].className = universe[row][col] ? "live" : "dead"
+        }
+
+        function updateStepsNumber(newSteps) {
+            steps = newSteps
+            STEPS_NUMBER_SPAN.innerHTML = steps
         }
 
         function createEmptyUniverse() {

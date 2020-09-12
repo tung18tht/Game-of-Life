@@ -77,7 +77,7 @@
         }
 
         #universe div {
-            border: 1px solid #222;
+            outline: 1px solid #222;
         }
 
         .live {
@@ -99,8 +99,8 @@
             <button onclick="random()">Random</button>
             <button onclick="reset()">Reset</button>
             <button onclick="configure()">Configure</button>
-            <div id="configurePanel">
-                <!-- <label for="width"><b>W</b></label>
+            <!-- <div id="configurePanel">
+                <label for="width"><b>W</b></label>
                 <input type="number" placeholder="width" name="width" required>
                 <label for="height"><b>H</b></label>
                 <input type="number" placeholder="height" name="height" required>
@@ -108,8 +108,8 @@
                 <label for="fps"><b>FPS</b></label>
                 <input type="range" name="fps">
                 <label for="zoom"><b>Zoom</b></label>
-                <input type="range" name="zoom"> -->
-            </div>
+                <input type="range" name="zoom">
+            </div> -->
         </div>
 
         <div id="title">
@@ -131,10 +131,26 @@
     </div>
 
     <script>
-        let width = 140
-        let height = 55
-        let cellSize = 10
+        const UNIVERSE_DIV = document.getElementById("universe")
+
         let fps = 5
+        let cellSize = 10
+
+        let width = Math.floor(
+            (
+                window.innerWidth
+                - UNIVERSE_DIV.getBoundingClientRect().x * 2
+            ) / cellSize
+        )
+        let height = Math.floor(
+            (
+                window.innerHeight
+                - UNIVERSE_DIV.getBoundingClientRect().y
+                - document.getElementById("footer").getBoundingClientRect().height
+                - document.getElementById("topbar").getBoundingClientRect().y
+                - 5
+            ) / cellSize
+        )
 
         let steps = 0
         let liveCells = 0
@@ -143,7 +159,6 @@
         let loopID = -1
         let universe = createEmptyUniverse()
 
-        const UNIVERSE_DIV = document.getElementById("universe")
         UNIVERSE_DIV.style.gridTemplateColumns = "repeat(" + width + ", " + cellSize + "px)"
 
         const CELL_DIVS = createEmpty2DArray(width, height)

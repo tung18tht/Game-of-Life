@@ -8,6 +8,8 @@
     <style>
         body {
             background-color: black;
+            color: white;
+            font-size: 15px;
         }
 
         #topbar {
@@ -20,6 +22,7 @@
         #buttons {
             margin-top: auto;
             margin-bottom: auto;
+            text-align: center;
         }
 
         #buttons button {
@@ -28,16 +31,40 @@
 
         #configurePanel {
             position: fixed;
-            width: 200px;
-            height: 200px;
+            width: 240px;
+            height: 160px;
             border: 1px solid white;
-            border-radius: 10%;
+            border-radius: 10px;
             background-color: rgba(0, 0, 0, 0.85);
+            font-family: monospace;
+            display: flex;
+            justify-content: center;
+        }
+
+        #configurePanel table {
+            width: 230px;
+            height: 150px;
+            align-self: center;
+        }
+
+        #configurePanel input[type=number]{
+            width: 40px;
+        }
+
+        #configurePanel input[type=range] {
+            width: 95%;
+        }
+
+        #saveLoadButtons {
+            border-top: 1px solid dimgrey;
+        }
+
+        #saveLoadButtons button {
+            width: 45%;
         }
 
         #title {
             margin: auto;
-            color: white;
             text-align: center;
             font-family: monospace;
             font-size: 30px;
@@ -46,23 +73,18 @@
         #stats {
             margin-top: auto;
             margin-bottom: auto;
-            color: white;
             text-align: right;
             font-family: monospace;
-            font-size: 15px;
         }
 
         #footer {
             margin: 5px;
-            color: white;
             font-family: monospace;
-            font-size: 15px;
         }
 
         #footer a {
             color: white;
             font-family: monospace;
-            font-size: 15px;
             font-style: italic;
             text-decoration: none;
         }
@@ -99,17 +121,33 @@
             <button onclick="random()">Random</button>
             <button onclick="reset()">Reset</button>
             <button onclick="configure()">Configure</button>
-            <!-- <div id="configurePanel">
-                <label for="width"><b>W</b></label>
-                <input type="number" placeholder="width" name="width" required>
-                <label for="height"><b>H</b></label>
-                <input type="number" placeholder="height" name="height" required>
-                <button onclick="apply()">Apply</button>
-                <label for="fps"><b>FPS</b></label>
-                <input type="range" name="fps">
-                <label for="zoom"><b>Zoom</b></label>
-                <input type="range" name="zoom">
-            </div> -->
+            <div id="configurePanel">
+                <table>
+                    <tr>
+                        <td>W <input type="number" min="1" max="999"></td>
+                        <td>H <input type="number" min="1" max="999"></td>
+                        <td><button onclick="apply()">Apply</button></td>
+                    </tr>
+                    <tr>
+                        <td>Speed</td>
+                        <td colspan="2">
+                            <input type="range" min="0.5" max="30">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Zoom</td>
+                        <td colspan="2">
+                            <input type="range" min="1" max="100">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" id="saveLoadButtons">
+                            <button onclick="save()">Save</button>
+                            <button onclick="load()">Load</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
 
         <div id="title">

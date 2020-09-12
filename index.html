@@ -17,6 +17,24 @@
             min-height: 50px;
         }
 
+        #buttons {
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        #buttons button {
+           min-width: 15%;
+        }
+
+        #configurePanel {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            border: 1px solid white;
+            border-radius: 10%;
+            background-color: rgba(0, 0, 0, 0.85);
+        }
+
         #title {
             margin: auto;
             color: white;
@@ -74,12 +92,24 @@
 
 <body>
     <div id="topbar">
-        <div>
+        <div id="buttons">
             <button onclick="play()">Play</button>
             <button onclick="pause()">Pause</button>
             <button onclick="step()">Step</button>
             <button onclick="random()">Random</button>
             <button onclick="reset()">Reset</button>
+            <button onclick="configure()">Configure</button>
+            <div id="configurePanel">
+                <!-- <label for="width"><b>W</b></label>
+                <input type="number" placeholder="width" name="width" required>
+                <label for="height"><b>H</b></label>
+                <input type="number" placeholder="height" name="height" required>
+                <button onclick="apply()">Apply</button>
+                <label for="fps"><b>FPS</b></label>
+                <input type="range" name="fps">
+                <label for="zoom"><b>Zoom</b></label>
+                <input type="range" name="zoom"> -->
+            </div>
         </div>
 
         <div id="title">
@@ -88,13 +118,13 @@
 
         <div id="stats">
             <span id="liveCells">0</span>/<span id="totalCells">0</span>
-                (<span id="alivePercentage">00.00</span>%) cells alive
+                (<span id="alivePercentage">0.00</span>%) cells alive
             <br>
             Steps: <span id="steps">0</span>
         </div>
     </div>
 
-    <div id="universe" title="You can judge the cells destiny ... by clicking"></div>
+    <div id="universe" title="You can judge the cells destiny ... by clicking!"></div>
 
     <div id="footer">Made by Tung Nguyen -
         <a href="https://github.com/tung18tht/Game-of-Life" target="_blank">Source code</a>

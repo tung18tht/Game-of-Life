@@ -169,60 +169,71 @@
     </div>
 
     <script>
-        const UNIVERSE_DIV = document.getElementById("universe")
-
         let fps = 5
         let cellSize = 10
 
-        let width = Math.floor(
-            (
-                window.innerWidth
-                - UNIVERSE_DIV.getBoundingClientRect().x * 2
-            ) / cellSize
-        )
-        let height = Math.floor(
-            (
-                window.innerHeight
-                - UNIVERSE_DIV.getBoundingClientRect().y
-                - document.getElementById("footer").getBoundingClientRect().height
-                - document.getElementById("topbar").getBoundingClientRect().y
-                - 5
-            ) / cellSize
-        )
+        let width = 0
+        let height = 0
 
         let steps = 0
         let liveCells = 0
-        let totalCells = width * height
+        let totalCells = 0
 
         let loopID = -1
-        let universe = createEmptyUniverse()
 
-        UNIVERSE_DIV.style.gridTemplateColumns = "repeat(" + width + ", " + cellSize + "px)"
+        let universe = []
+        let cellDivs = []
 
-        const CELL_DIVS = createEmpty2DArray(width, height)
-
-        for (let row= 0; row < height; row++) {
-            for (let col = 0; col < width; col++) {
-                const cellDiv = document.createElement("div")
-                cellDiv.style.width = cellSize + "px"
-                cellDiv.style.height = cellSize + "px"
-
-                cellDiv.className = "dead"
-
-                cellDiv.addEventListener("click", () => flip(row, col))
-
-                UNIVERSE_DIV.appendChild(cellDiv)
-                CELL_DIVS[row][col] = cellDiv
-            }
-        }
+        const UNIVERSE_DIV = document.getElementById("universe")
 
         const LIVE_CELLS_SPAN = document.getElementById("liveCells")
         const TOTAL_CELLS_SPAN = document.getElementById("totalCells")
         const ALIVE_PERCENTAGE_SPAN = document.getElementById("alivePercentage")
         const STEPS_SPAN = document.getElementById("steps")
 
-        TOTAL_CELLS_SPAN.innerHTML = totalCells
 
+        setupNewPage()
+
+        function setupNewPage() {
+            width = Math.floor(
+                (
+                    window.innerWidth
+                    - UNIVERSE_DIV.getBoundingClientRect().x * 2
+                ) / cellSize
+            )
+            height = Math.floor(
+                (
+                    window.innerHeight
+                    - UNIVERSE_DIV.getBoundingClientRect().y
+                    - document.getElementById("footer").getBoundingClientRect().height
+                    - document.getElementById("topbar").getBoundingClientRect().y
+                    - 5
+                ) / cellSize
+            )
+
+            totalCells = width * height
+            TOTAL_CELLS_SPAN.innerHTML = totalCells
+
+            UNIVERSE_DIV.style.gridTemplateColumns = "repeat(" + width + ", " + cellSize + "px)"
+
+            universe = createEmptyUniverse()
+            cellDivs = createEmpty2DArray(width, height)
+
+            for (let row= 0; row < height; row++) {
+                for (let col = 0; col < width; col++) {
+                    const cellDiv = document.createElement("div")
+                    cellDiv.style.width = cellSize + "px"
+                    cellDiv.style.height = cellSize + "px"
+
+                    cellDiv.className = "dead"
+
+                    cellDiv.addEventListener("click", () => flip(row, col))
+
+                    UNIVERSE_DIV.appendChild(cellDiv)
+                    cellDivs[row][col] = cellDiv
+                }
+            }
+        }
 
         function play() {
             if (loopID == -1) {
@@ -298,6 +309,22 @@
             updateSteps(0)
         }
 
+        function configure() {
+
+        }
+
+        function apply() {
+
+        }
+
+        function save() {
+
+        }
+
+        function load() {
+
+        }
+
         function flip(row, col) {
             if (loopID == -1) {
                 universe[row][col] = !universe[row][col]
@@ -316,7 +343,7 @@
         }
 
         function updateCellDiv(row, col) {
-            CELL_DIVS[row][col].className = universe[row][col] ? "live" : "dead"
+            cellDivs[row][col].className = universe[row][col] ? "live" : "dead"
         }
 
         function updateAliveStats(newLiveCells) {

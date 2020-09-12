@@ -41,6 +41,14 @@
             justify-content: center;
         }
 
+        .visible {
+            visibility: visible;
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+
         #configurePanel table {
             width: 230px;
             height: 150px;
@@ -120,8 +128,8 @@
             <button onclick="step()">Step</button>
             <button onclick="random()">Random</button>
             <button onclick="reset()">Reset</button>
-            <button onclick="configure()">Configure</button>
-            <div id="configurePanel">
+            <button onclick="configure()" id="configureButton">Configure</button>
+            <div id="configurePanel" class="hidden">
                 <table>
                     <tr>
                         <td>W <input type="number" min="1" max="999"></td>
@@ -191,6 +199,8 @@
         const ALIVE_PERCENTAGE_SPAN = document.getElementById("alivePercentage")
         const STEPS_SPAN = document.getElementById("steps")
 
+        const CONFIGURE_BUTTON = document.getElementById("configureButton")
+        const CONFIGURE_PANEL_DIV = document.getElementById("configurePanel")
 
         setupNewPage()
 
@@ -310,7 +320,21 @@
         }
 
         function configure() {
+            if (CONFIGURE_PANEL_DIV.className == "hidden") {
+                const buttonInfo = CONFIGURE_BUTTON.getBoundingClientRect()
 
+                const buttonMiddle = (buttonInfo.right - buttonInfo.left) / 2 + buttonInfo.left
+                const panelLeft =
+                    buttonMiddle
+                    - parseInt(window.getComputedStyle(CONFIGURE_PANEL_DIV).width) / 2
+
+                CONFIGURE_PANEL_DIV.style.left = (panelLeft > 0 ? panelLeft : 0) + "px"
+                CONFIGURE_PANEL_DIV.style.top = (buttonInfo.bottom + 5) + "px"
+
+                CONFIGURE_PANEL_DIV.className = "visible"
+            } else {
+                CONFIGURE_PANEL_DIV.className = "hidden"
+            }
         }
 
         function apply() {

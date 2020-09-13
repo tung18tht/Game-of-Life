@@ -132,9 +132,9 @@
             <div id="configurePanel" class="hidden">
                 <table>
                     <tr>
-                        <td>W <input type="number" min="1" max="999"></td>
-                        <td>H <input type="number" min="1" max="999"></td>
-                        <td><button onclick="apply()">Apply</button></td>
+                        <td>W <input type="number" min="1" max="999" step="1" id="width"></td>
+                        <td>H <input type="number" min="1" max="999" step="1" id="height"></td>
+                        <td><button onclick="applyWH()">Apply</button></td>
                     </tr>
                     <tr>
                         <td>Speed</td>
@@ -194,6 +194,9 @@
         let universe = []
         let cellDivs = []
 
+        const TOPBAR_DIV = document.getElementById("topbar")
+        const FOOTER_DIV = document.getElementById("footer")
+
         const UNIVERSE_DIV = document.getElementById("universe")
 
         const LIVE_CELLS_SPAN = document.getElementById("liveCells")
@@ -204,31 +207,48 @@
         const CONFIGURE_BUTTON = document.getElementById("configureButton")
         const CONFIGURE_PANEL_DIV = document.getElementById("configurePanel")
 
+        const WIDTH_INPUT = document.getElementById("width")
+        const HEIGHT_INPUT = document.getElementById("height")
+
         setupNewPage()
 
         function setupNewPage() {
             updateFPS(document.getElementById("fps").value)
             updateCellSize(document.getElementById("cellSize").value)
 
-            width = Math.floor(
+            width = autoFitWidth()
+            height = autoFitHeight()
+
+            WIDTH_INPUT.value = width
+            HEIGHT_INPUT.value = height
+
+            updateTotalCells()
+
+            setupNewUniverse()
+        }
+
+        function autoFitWidth() {
+            return Math.floor(
                 (
                     window.innerWidth
-                    - UNIVERSE_DIV.getBoundingClientRect().x * 2
+                    - UNIVERSE_DIV.getBoundingClientRect().left * 2
                 ) / cellSize
             )
-            height = Math.floor(
+        }
+
+        function autoFitHeight() {
+            return Math.floor(
                 (
                     window.innerHeight
-                    - UNIVERSE_DIV.getBoundingClientRect().y
-                    - document.getElementById("footer").getBoundingClientRect().height
-                    - document.getElementById("topbar").getBoundingClientRect().y
+                    - UNIVERSE_DIV.getBoundingClientRect().top
+                    - FOOTER_DIV.getBoundingClientRect().height
+                    - TOPBAR_DIV.getBoundingClientRect().top
                     - 5
                 ) / cellSize
             )
+        }
 
-            totalCells = width * height
-            TOTAL_CELLS_SPAN.innerHTML = totalCells
-
+        function setupNewUniverse() {
             UNIVERSE_DIV.style.gridTemplateColumns = "repeat(" + width + ", " + cellSize + "px)"
 
             universe = createEmptyUniverse()
@@ -343,8 +363,34 @@
             }
         }
 
-        function apply() {
+        function applyWH() {
+            let newWidth = WIDTH_INPUT.value
+            let newHeight = HEIGHT_INPUT.value
 
+            if (width == newWidth && height == newHeight) {
+                return
+            }
+
+            pause()
+            UNIVERSE_DIV.innerHTML = ""
+
+            if (newWidth < 1 || newWidth > 999) {
+                newWidth = autoFitWidth()
+                WIDTH_INPUT.value = newWidth
+            }
+            if (newHeight < 1 || newHeight > 999) {
+                newHeight = autoFitHeight()
+                HEIGHT_INPUT.value = newHeight
+            }
+
+            width = newWidth
+            height = newHeight
+
+            updateTotalCells()
+            updateAliveStats(0)
+            updateSteps(0)
+
+            setupNewUniverse()
         }
 
         function updateFPS(newFPS) {
@@ -416,6 +462,11 @@
 
         function updateCellDiv(row, col) {
             cellDivs[row][col].className = universe[row][col] ? "live" : "dead"
+        }
+
+        function updateTotalCells() {
+            totalCells = width * height
+            TOTAL_CELLS_SPAN.innerHTML = totalCells
         }
 
         function updateAliveStats(newLiveCells) {

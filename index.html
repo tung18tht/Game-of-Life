@@ -139,7 +139,8 @@
                     <tr>
                         <td>Speed</td>
                         <td colspan="2">
-                            <input type="range" min="0.5" max="30">
+                            <input type="range" min="0" max="11" step="1" value="5"
+                                   id="fps" oninput="updateFPS(this.value)">
                         </td>
                     </tr>
                     <tr>
@@ -177,15 +178,15 @@
     </div>
 
     <script>
-        let fps = 5
+        let fps = -1
         let cellSize = 10
 
-        let width = 0
-        let height = 0
+        let width = -1
+        let height = -1
 
         let steps = 0
         let liveCells = 0
-        let totalCells = 0
+        let totalCells = -1
 
         let loopID = -1
 
@@ -243,10 +244,13 @@
                     cellDivs[row][col] = cellDiv
                 }
             }
+
+            updateFPS(document.getElementById("fps").value)
         }
 
         function play() {
             if (loopID == -1) {
+                step()
                 loopID = setInterval(step, 1000 / fps)
             }
         }
@@ -339,6 +343,21 @@
 
         function apply() {
 
+        }
+
+        function updateFPS(newFPS) {
+            if (newFPS == 0) {
+                fps = 0.5
+            } else if (newFPS == 11) {
+                fps = 30
+            } else {
+                fps = newFPS
+            }
+
+            if (loopID != -1) {
+                pause()
+                play()
+            }
         }
 
         function save() {

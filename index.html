@@ -288,24 +288,31 @@
             const newUniverse = createEmptyUniverse()
             let newLiveCells = 0
 
+            livingNeighbors = createEmpty2DArray(width, height)
+            livingNeighbors.forEach(row => row.fill(0))
             for (let row = 0; row < height; row++) {
                 for (let col = 0; col < width; col++) {
-                    const minRow = row > 1 ? row - 1 : 0
-                    const minCol = col > 1 ? col - 1 : 0
-                    const capRow = row < height - 2 ? row + 2 : height
-                    const capCol = col < width - 2 ? col + 2 : width
+                    if (universe[row][col]) {
+                        const minRow = row > 1 ? row - 1 : 0
+                        const minCol = col > 1 ? col - 1 : 0
+                        const capRow = row < height - 2 ? row + 2 : height
+                        const capCol = col < width - 2 ? col + 2 : width
 
-                    let livingNeighbors = 0
-
-                    for (let neighborRow = minRow; neighborRow < capRow; neighborRow++) {
-                        for (let neighborCol = minCol; neighborCol < capCol; neighborCol++) {
-                            if (neighborRow != row || neighborCol != col) {
-                                livingNeighbors += universe[neighborRow][neighborCol] ? 1 : 0
+                        for (let neighborRow = minRow; neighborRow < capRow; neighborRow++) {
+                            for (let neighborCol = minCol; neighborCol < capCol; neighborCol++) {
+                                if (neighborRow != row || neighborCol != col) {
+                                    livingNeighbors[neighborRow][neighborCol] += 1
+                                }
                             }
                         }
                     }
+                }
+            }
 
-                    if (livingNeighbors == 3 || (universe[row][col] && livingNeighbors == 2)) {
+            for (let row = 0; row < height; row++) {
+                for (let col = 0; col < width; col++) {
+                    if (livingNeighbors[row][col] == 3
+                        || (universe[row][col] && livingNeighbors[row][col] == 2)) {
                         newUniverse[row][col] = true
                         newLiveCells += 1
                     }
